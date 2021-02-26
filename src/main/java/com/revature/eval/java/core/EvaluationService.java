@@ -1,6 +1,10 @@
 package com.revature.eval.java.core;
 
 import java.nio.charset.Charset;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -295,12 +299,24 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
+	static class BinarySearch<T extends Comparable<T>> {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
 			// TODO Write an implementation for this method declaration
-			return 0;
+			int low = 0;
+			int high = sortedList.size()-1;
+			while (low <= high) {
+				int mid = (low + high) / 2;
+				if (sortedList.get(mid).equals(t)) {
+					return mid;
+				} else if (sortedList.get(mid).compareTo(t) < 0) {
+					low = mid + 1;
+				} else if (sortedList.get(mid).compareTo(t) > 0) {
+					high = mid - 1;
+				}
+			}
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -476,21 +492,28 @@ public class EvaluationService {
 	 * @param i
 	 * @return
 	 */
-	public int calculateNthPrime(int i) {
+	public int calculateNthPrime(int n) {
 		// TODO Write an implementation for this method declaration
-
-//		ArrayList<Integer> primes = new ArrayList<>();
-//		for (int j = 2; j < i; j++) {
-//			primes.add(j);
-//		}
-//		for (Integer n : primes) {
-//			for (int k = n+1; k < primes.size(); k++) {
-//				if (primes.get(k) % n == 0) {
-//					primes.remove(o)
-//				}
-//			}
-//		}
-		return 0;
+		if (n == 0) {
+			throw new IllegalArgumentException();
+		}
+		int primecount = 0, num = 1, i;
+		while (primecount < n)  
+		{  
+			num += 1;  
+			for (i = 2; i <= num; i++)  
+			{   
+				if (num % i == 0)   
+				{  
+					break;  
+				}  
+			}  
+			if (i == num)  
+			{  
+				primecount += 1;  
+			}  
+		} 
+		return num;
 	}
 
 	/**
@@ -660,7 +683,12 @@ public class EvaluationService {
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		//java.time.Period gigasecond = Period.of(years, months, days);
+		//Duration gigasecond = Duration.ofSeconds(1000000000);
+		//LocalDateTime gigasecond = given.atStartOfDay()z//LocalDateTime.of(0, 0, 0, 1, 46, 40);
+		//LocalDateTime dt = LocalDateTime.of(given., month, dayOfMonth, hour, 0, 0)
+		System.out.println(given.isSupported(ChronoUnit.SECONDS));
+		return null;//given.plus(amountToAdd, unit);
 	}
 
 	/**
@@ -736,20 +764,17 @@ public class EvaluationService {
 		}
 		char[] nospaces = string.replaceAll(" ", "").toCharArray();
 		int[] number = new int[nospaces.length];
-
+		int sum = 0;
 		for (int i = 0; i < number.length; i++) {
 			number[i] = Character.getNumericValue(nospaces[i]);
 		}
-
 		for (int i = 0; i < number.length; i++) {
-			if (i % 2 == 0) {
-				number[i] = (char) nospaces[i];
-			} else {
-				number[i] = (char) nospaces[i];
+			if (i % 2 == 0 ) {
+				number[i] = number[i]*2 > 10 ?  number[i]*2 - 9 : number[i]*2;
 			}
+			sum += number[i];
 		}
-
-		return false;
+		return sum % 10 == 0 ? true : false;
 	}
 
 	/**

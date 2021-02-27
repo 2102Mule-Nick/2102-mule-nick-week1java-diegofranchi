@@ -2,8 +2,10 @@ package com.revature.eval.java.core;
 
 import java.nio.charset.Charset;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
@@ -683,12 +685,12 @@ public class EvaluationService {
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
 		// TODO Write an implementation for this method declaration
-		//java.time.Period gigasecond = Period.of(years, months, days);
-		//Duration gigasecond = Duration.ofSeconds(1000000000);
-		//LocalDateTime gigasecond = given.atStartOfDay()z//LocalDateTime.of(0, 0, 0, 1, 46, 40);
-		//LocalDateTime dt = LocalDateTime.of(given., month, dayOfMonth, hour, 0, 0)
-		System.out.println(given.isSupported(ChronoUnit.SECONDS));
-		return null;//given.plus(amountToAdd, unit);
+		Duration gigasecond = Duration.ofSeconds(1000000000);
+		if (given instanceof LocalDateTime) {
+			return given.plus(gigasecond);
+		}
+		LocalDateTime birthday = LocalDate.of(given.get(ChronoField.YEAR), given.get(ChronoField.MONTH_OF_YEAR), given.get(ChronoField.DAY_OF_MONTH)).atStartOfDay();
+		return birthday.plus(gigasecond);
 	}
 
 	/**
@@ -807,7 +809,6 @@ public class EvaluationService {
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
 		int num1 = 0, num2 = 0;
-		string.indexOf("plus");
 		if (string.contains("plus")) {
 			num1 = Integer.parseInt(string.substring(0, string.indexOf("plus")).replaceAll("[^0-9-]", ""));
 			num2 = Integer.parseInt(string.substring(string.indexOf("plus")).replaceAll("[^0-9-]", ""));
